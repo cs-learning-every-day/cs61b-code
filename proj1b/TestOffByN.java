@@ -1,0 +1,17 @@
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+/**
+ * @author xmchx (sunhuayangak47@gmail.com)
+ */
+public class TestOffByN {
+	@Test
+	public void testOffByN() {
+		OffByN offBy5 = new OffByN(5);
+		assertTrue(offBy5.equalChars('a', 'f'));
+		assertTrue(offBy5.equalChars('f', 'a'));
+		assertFalse(offBy5.equalChars('f', 'h'));
+
+	}
+}

@@ -16,6 +16,9 @@
 *.tar.gz
 *.rar
 **/out/
+idea/
+out/
+**/.gitignore
 hs_err_pid*
 *~
 .fuse_hidden*
