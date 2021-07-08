@@ -54,15 +54,9 @@ public class UnionFind {
 		if (szV1 > szV2) {
 			parents[pV2] = pV1;
 			sizes[pV1] += sizes[pV2];
-			if (parents[v1] != -1) { // not root
-				sizes[v1] += sizes[pV2];
-			}
 		} else {
 			parents[pV1] = pV2;
 			sizes[pV2] += sizes[pV1];
-			if (parents[v2] != -1) { // not root
-				sizes[v2] += sizes[pV1];
-			}
 		}
 	}
 
@@ -70,8 +64,9 @@ public class UnionFind {
 	   allowing for fast search-time. */
 	public int find(int vertex) {
 		validate(vertex);
-		while (parents[vertex] != -1) {
-			vertex = parents[vertex];
+		if (parents[vertex] != -1) {
+			parents[vertex] = find(parents[vertex]);
+			return parents[vertex];
 		}
 		return vertex;
 	}

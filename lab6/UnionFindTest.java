@@ -43,5 +43,9 @@ public class UnionFindTest {
 		uf.union(0, 7);
 
 		assertTrue(uf.connected(1, 9));
+		assertTrue(uf.connected(7, 0));
+		assertTrue(uf.connected(8, 0));
+
+		uf.union(0, 9);
 	}
 }
