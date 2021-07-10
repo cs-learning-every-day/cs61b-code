@@ -1,21 +1,37 @@
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class BubbleGridTest {
 
-    @Test
-    public void testBasic() {
+	@Test
+	public void testBasic() {
 
-        int[][] grid = {{1, 0, 0, 0},
-                        {1, 1, 1, 0}};
-        int[][] darts = {{1, 0}};
-        int[] expected = {2};
+		int[][] grid = {{1, 0, 0, 0},
+				{1, 1, 1, 0}};
+		int[][] darts = {{1, 0}};
+		int[] expected = {2};
 
-        validate(grid, darts, expected);
-    }
+		validate(grid, darts, expected);
 
-    private void validate(int[][] grid, int[][] darts, int[] expected) {
-        BubbleGrid sol = new BubbleGrid(grid);
-        assertArrayEquals(expected, sol.popBubbles(darts));
-    }
+		int[][] grid2 = {{1, 1, 0}, {1, 0, 0},
+				{1, 1, 0}, {1, 1, 1}};
+		int[][] darts2 = {{2, 2}, {2, 0}};
+		int[] expected2 = {0, 4};
+
+		validate(grid2, darts2, expected2);
+
+
+		int[][] grid3 = {{0, 0, 0}, {1, 0, 0},
+				{1, 1, 0}, {1, 1, 1}};
+		int[][] darts3 = {{2, 2}, {2, 0}};
+		int[] expected3 = {0, 0};
+
+		validate(grid3, darts3, expected3);
+	}
+
+	private void validate(int[][] grid, int[][] darts, int[] expected) {
+		BubbleGrid sol = new BubbleGrid(grid);
+		assertArrayEquals(expected, sol.popBubbles(darts));
+	}
 }
