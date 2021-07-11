@@ -1,7 +1,10 @@
 package es.datastructur.synthesizer;
 
+import java.util.HashSet;
+import java.util.Set;
+
 //Note: This file will not compile until you complete task 1 (BoundedQueue).
-public class GuitarString {
+public class DrumString {
 	/**
 	 * Constants. Do not change. In case you're curious, the keyword final
 	 * means the values cannot be changed at runtime.
@@ -13,7 +16,7 @@ public class GuitarString {
 	private BoundedQueue<Double> buffer;
 
 	/* Create a guitar string of the given frequency.  */
-	public GuitarString(double frequency) {
+	public DrumString(double frequency) {
 		long capacity = Math.round(SR / frequency);
 		buffer = new ArrayRingBuffer<>((int) capacity);
 		for (int i = 0; i < capacity; i++) {
@@ -26,10 +29,16 @@ public class GuitarString {
 	public void pluck() {
 		int len = buffer.capacity();
 		double r;
+		Set<Double> randomSet = new HashSet<>();
 		for (int i = 0; i < len; i++) {
 			buffer.dequeue();
 			r = Math.random() - 0.5;
-			buffer.enqueue(r);
+
+			if (!randomSet.contains(r)) {
+				r = Math.random() - 0.5;
+				randomSet.add(r);
+				buffer.enqueue(r);
+			}
 		}
 	}
 
@@ -41,6 +50,10 @@ public class GuitarString {
 		double firstSample = buffer.dequeue();
 		double secondSample = buffer.peek();
 		double newSample = (firstSample + secondSample) / 2 * DECAY;
+		double flag = Math.random();
+		if (flag <= 0.5) {
+			newSample = -newSample;
+		}
 		buffer.enqueue(newSample);
 	}
 
