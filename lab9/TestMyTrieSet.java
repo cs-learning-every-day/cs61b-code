@@ -1,11 +1,34 @@
-import static org.junit.Assert.*;
 import org.junit.Test;
+
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by Jenny Huang on 3/12/19.
  */
 public class TestMyTrieSet {
+
+    @Test
+    public void myTest() {
+        MyTrieSet t = new MyTrieSet();
+        t.add("cat");
+        t.add("cast");
+        t.add("dog");
+        t.add("does");
+        t.add("doggy");
+        t.add("add");
+
+        List<String> p1 = t.keysWithPrefix("d");
+        List<String> p2 = t.keysWithPrefix("do");
+
+        assertEquals(3, p1.size());
+        assertEquals(p1, p2);
+
+        assertEquals("doggy",t.longestPrefixOf("d"));
+        assertEquals("cast",t.longestPrefixOf("ca"));
+        assertEquals("add",t.longestPrefixOf("add"));
+    }
 
     // assumes add/contains work
     @Test
