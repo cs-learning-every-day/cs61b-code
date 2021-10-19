@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.Queue;
 
+@SuppressWarnings("unchecked")
 public class QuickSort {
     /**
      * Returns a new queue that contains the given queues catenated together.
@@ -8,7 +9,7 @@ public class QuickSort {
      *
      * @param q1  A Queue of items
      * @param q2  A Queue of items
-     * @return    A Queue containing the items of 
+     * @return    A Queue containing the items of
      *            q1 followed by the items of q2.
      */
     private static <Item extends Comparable> Queue<Item> catenate(Queue<Item> q1, Queue<Item> q2) {
@@ -58,6 +59,17 @@ public class QuickSort {
             Queue<Item> unsorted, Item pivot,
             Queue<Item> less, Queue<Item> equal, Queue<Item> greater) {
         // Your code here!
+        int cmp;
+        for (Item item : unsorted) {
+            cmp = pivot.compareTo(item);
+            if (cmp < 0) {
+                greater.enqueue(item);
+            } else if (cmp > 0) {
+                less.enqueue(item);
+            } else {
+              	equal.enqueue(item);
+            }
+        }
     }
 
     /**
@@ -68,7 +80,24 @@ public class QuickSort {
      */
     public static <Item extends Comparable> Queue<Item> quickSort(
             Queue<Item> items) {
+    	if (items == null) return null;
+    	if (items.size() <= 1) return items;
         // Your code here!
-        return items;
+		Queue<Item> res = new Queue<>();
+
+
+		Item pivot = getRandomItem(items);
+		Queue<Item> less = new Queue<>();
+		Queue<Item> equal = new Queue<>();
+		Queue<Item> greater = new Queue<>();
+		partition(items, pivot, less, equal, greater);
+
+		quickSort(less);
+		quickSort(greater);
+
+		catenate(res, less);
+		catenate(res, equal);
+		catenate(res, greater);
+		return res;
     }
 }
