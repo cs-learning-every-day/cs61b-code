@@ -2,6 +2,7 @@ package bearmaps.proj2c;
 
 import bearmaps.hw4.streetmap.Node;
 import bearmaps.hw4.streetmap.StreetMapGraph;
+import bearmaps.lab9.MyTrieSet;
 import bearmaps.proj2ab.KdTree;
 import bearmaps.proj2ab.Point;
 
@@ -16,6 +17,8 @@ import java.util.*;
 public class AugmentedStreetMapGraph extends StreetMapGraph {
     private KdTree tree;
     private Map<Point, Long> pointIdMap = new HashMap<>();
+    private MyTrieSet trie = new MyTrieSet();
+    private Map<String, List<Node>> cleanNameNodesMap = new HashMap<>();
 
     public AugmentedStreetMapGraph(String dbPath) {
         super(dbPath);
@@ -28,6 +31,15 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
                 Point point = new Point(node.lon(), node.lat());
                 pointIdMap.put(point, node.id());
                 points.add(point);
+            }
+
+            if (node.name() != null) {
+                String cleanName = cleanString(node.name());
+                trie.add(cleanName);
+
+                List<Node> lst = cleanNameNodesMap.getOrDefault(cleanName, new ArrayList<>());
+                lst.add(node);
+                cleanNameNodesMap.put(cleanName, lst);
             }
         });
 
@@ -64,7 +76,13 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * cleaned <code>prefix</code>.
      */
     public List<String> getLocationsByPrefix(String prefix) {
-        return new LinkedList<>();
+        Set<String> set = new HashSet<>();
+
+        for (var name : trie.keysWithPrefix(cleanString(prefix))) {
+            cleanNameNodesMap.get(name).forEach(node -> set.add(node.name()));
+        }
+
+        return new LinkedList<>(set);
     }
 
     /**
@@ -82,7 +100,17 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * "id" -> Number, The id of the node. <br>
      */
     public List<Map<String, Object>> getLocations(String locationName) {
-        return new LinkedList<>();
+        var res = new LinkedList<Map<String, Object>>();
+        cleanNameNodesMap.get(cleanString(locationName))
+                .forEach(node -> {
+                    var m = new HashMap<String, Object>();
+                    m.put("lat", node.lat());
+                    m.put("lon", node.lon());
+                    m.put("name", node.name());
+                    m.put("id", node.id());
+                    res.add(m);
+                });
+        return res;
     }
 
 
